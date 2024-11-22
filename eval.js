@@ -44,25 +44,6 @@ MPP.client.on("a", function(msg) {
             }
             MPP.chat.send(run(msg.a.substring(1).trim()))
         }
-        if (cmd == '\'steal') {
-            MPP.client.sendArray([{
-                'm': 'userset',
-                'set': {
-                    'name': MPP.client.ppl[on(6)].name,
-                    'color': MPP.client.ppl[on(6)].color
-                }
-            }]);
-        }
-        if (cmd == "'reset") {
-            MPP.client.sendArray([{
-                'm': 'userset',
-                'set': {
-                    'name': 'circuit',
-                    'color': '#007bff'
-                }
-            }]);
-        }
-    }
     if (cmd == '\'stats') {
         log(`---${name}---`)
         log(`client.ppl`)
