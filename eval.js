@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         eval
 // @namespace    http://tampermonkey.net/
-// @version      v1.0-alpha1
-// @description  try to take over the world!
+// @version      v1.0-alpha1.1
+// @description  uate
 // @author       circjit
 // @match        https://multiplayerpiano.org/*
 // @match        https://multiplayerpiano.net/*
@@ -44,9 +44,10 @@ MPP.client.on("a", function(msg) {
             }
             MPP.chat.send(run(msg.a.substring(1).trim()))
         }
-    if (cmd == '\'stats') {
-        log(`---${name}---`)
-        log(`client.ppl`)
-        log(JSON.stringify(MPP.client.channel))
+        if (cmd == '\'stats') {
+            log(`---${name}---`)
+            log(`client.ppl`)
+            log(JSON.stringify(MPP.client.channel))
+        }
     }
 });
