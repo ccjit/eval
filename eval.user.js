@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         eval
-// @namespace    http://tampermonkey.net/
-// @version      v2.0
+// @namespace    https://ccjit.github.io/my-site
+// @version      v2.1
 // @description  uate
 // @author       ccjt
 // @match        https://multiplayerpiano.org/*
@@ -9,12 +9,14 @@
 // @match        https://mpp.8448.space/*
 // @match        https://staging-mpp.sad.ovh/*
 // @icon         data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsSAAALEgHS3X78AAAAAXNSR0IArs4c6QAAAUhJREFUeF7tmskOwyAMROH/P5qKAxVCpB4kK7LLyy0pYpnMgklrKaWVi68KADAACeABF3tgwQRJAVKAFCAFSAEDgdZsktTaAyXfJcUgAMAAJGCKGw/ABEkBUyYRGxCDXtVg1r2CxACFugCQdLMEA/AApxMhPAAPyFkwYYKKCb6pb2UsZV/S2ygVqsQAZVLKYMrElbGUfgAABiABPEDxJUyQGBRqASWaFLop8aWMpfTjGoPqgB7trgfAA8STPiQTPOkwW1sAUFIg21s9mW84Bswm2JOl388Jc3pvgRESAHXBA4wZlBWglACMSQ8gdgvtbVa2jGcne5LwDJgX9fSm/54Buzf75AU7VvySQTgGWJr1/h0A2AcI1aA37SL1hwSQABLg7/L2V81IruU8F0wQE8QE7zDBtWL8lty3SGA9Uxj3V5jg7rxgPPsAQdQYDUupC18AAAAASUVORK5CYII=
+// @downloadURL  https://github.com/ccjit/eval/raw/refs/heads/main/eval.user.js
+// @updateURL    https://github.com/ccjit/eval/raw/refs/heads/main/eval.user.js
 // @grant        GM_info
 // ==/UserScript==
 let header = GM_info.script
 let version = header.version
 
-let errors = [
+const errors = [
     "failed",
     "error",
     "err",
@@ -42,6 +44,15 @@ let errors = [
     "❎",
     "🤷"
 ]
+const zwsp = "​"
+const outsymbols = [
+    "⧔",
+    ">",
+    zwsp + "~",
+    "⤷",
+    "⧐"
+]
+let outsymbol = outsymbols[0]
 let types = false
 MPP.client.on("a", function(msg) {
     let args = msg.a.split(" ");
@@ -92,7 +103,6 @@ MPP.client.on("a", function(msg) {
     let name = msg.p.name;
     let log = function(txt) {console.log(txt)}
     let err = error[Math.floor(Math.random()*error.length)]
-    let zwsp = "​"
     if (MPP.client.participantId == msg.p.id) {
         if (cmd == '.') {
             try {
@@ -100,18 +110,18 @@ MPP.client.on("a", function(msg) {
                 let app = ""
                 if (types) app = "[" + (typeof result).toUpperCase() + "] "
                 if (typeof result == "string") {
-                    send(zwsp + '~ ' + app + result.replaceAll("\\", "").replaceAll(localStorage.token, "no").replaceAll(btoa(localStorage.token), "no"))
+                    send(outsymbol + ' ' + app + result.replaceAll("\\", "").replaceAll(localStorage.token, "no").replaceAll(btoa(localStorage.token), "no"))
                 } else {
                     if (typeof result == "undefined") {
-                        send(zwsp + '~ ' + app + 'undefined')
+                        send(outsymbol + ' ' + app + 'undefined')
                     } else if (typeof result == "string") {
-                        send(zwsp + '~ ' + app + result.replaceAll("\\", ""))
+                        send(outsymbol + ' ' + app + result.replaceAll("\\", ""))
                     } else if (typeof result == "number") {
-                        send(zwsp + '~ ' + app + result)
+                        send(outsymbol + ' ' + app + result)
                     } else if (typeof result == "function") {
-                        send(zwsp + '~ ' + app + '𝑓 ' + result.name + "(..." + result.length + ")")
+                        send(outsymbol + ' ' + app + '𝑓 ' + result.name + "(..." + result.length + ")")
                     } else {
-                        send(zwsp + '~ ' + app + JSON.stringify(result))
+                        send(outsymbol + ' ' + app + JSON.stringify(result))
                     }
                 }
             } catch (err) {
